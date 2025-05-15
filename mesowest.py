@@ -15,12 +15,133 @@ COOKIES = {
 
 
 data_save = []
-CSV_FILENAME = "example.csv"
+CSV_FILENAME = "University of Utah.csv"
 
 FIELDNAMES = [
-    "Station Name", "Station ID", "County", "State", "Country", "Timezone",
-    "Local Region Category", "NWS Region", "NWS CWA", "NWS Zone",
-    "NWS Fire Zone", "Additional Site/Station Description"
+        "Station Name",
+        "Station ID",
+        "Mesonet ID",
+        "County",
+        "State",
+        "Country",
+        "Timezone",
+        "Local Region Category",
+        "NWS Region",
+        "NWS CWA",
+        "NWS Zone",
+        "NWS Fire Zone",
+        "GACC Region",
+        "SUBGACC Region",
+        "Latitude",
+        "Longitude",        
+        "Elevation",
+        "Installed",
+        "Calibration date",
+        "In service date",
+        "Last maintenance",       
+        "Altimeter Sensor Type",
+        "Altimeter Sensor Brand",
+        "Altimeter Sensor Model",
+        "Altimeter Sensor Install Date",
+        "Altimeter Sensor Height from Station Base",
+        "Altimeter Sensor Height AGL",
+        "Ceiling Sensor Type",
+        "Ceiling Sensor Brand",
+        "Ceiling Sensor Model",
+        "Ceiling Sensor Install Date",
+        "Ceiling Sensor Height from Station Base",
+        "Ceiling Sensor Height AGL",                
+        "Precipitation 1hr Sensor Type",
+        "Precipitation 1hr Sensor Brand",
+        "Precipitation 1hr Sensor Model",
+        "Precipitation 1hr Sensor Install Date",
+        "Precipitation 1hr Sensor Height from Station Base",
+        "Precipitation 1hr Sensor Height AGL",
+        "Precipitation 2hr Sensor Type",
+        "Precipitation 2hr Sensor Brand",
+        "Precipitation 2hr Sensor Model",
+        "Precipitation 2hr Sensor Install Date",
+        "Precipitation 2hr Sensor Height from Station Base",
+        "Precipitation 2hr Sensor Height AGL",
+        "Precipitation 3hr Sensor Type",
+        "Precipitation 3hr Sensor Brand",
+        "Precipitation 3hr Sensor Model",
+        "Precipitation 3hr Sensor Install Date",
+        "Precipitation 3hr Sensor Height from Station Base",
+        "Precipitation 3hr Sensor Height AGL",
+        "Precipitation 6hr Sensor Type",
+        "Precipitation 6hr Sensor Brand",
+        "Precipitation 6hr Sensor Model",
+        "Precipitation 6hr Sensor Install Date",
+        "Precipitation 6hr Sensor Height from Station Base",
+        "Precipitation 6hr Sensor Height AGL",
+        "Pressure change (PCHA) Sensor Type",
+        "Pressure change (PCHA) Sensor Brand",
+        "Pressure change (PCHA) Sensor Model",
+        "Pressure change (PCHA) Sensor Install Date",
+        "Pressure change (PCHA) Sensor Height from Station Base",
+        "Pressure change (PCHA) Sensor Sensor Height AGL",
+        "Pressure Tendency (P03D) Sensor Type",
+        "Pressure Tendency (P03D) Sensor Brand",
+        "Pressure Tendency (P03D) Sensor Model",
+        "Pressure Tendency (P03D) Sensor Install Date",
+        "Pressure Tendency (P03D) Sensor Height from Station Base",
+        "Pressure Tendency (P03D) Sensor Height AGL",
+        "Relative Humidity (RELH) Sensor Type",
+        "Relative Humidity (RELH) Sensor Brand",
+        "Relative Humidity (RELH) Sensor Model",
+        "Relative Humidity (RELH) Sensor Install Date",
+        "Relative Humidity (RELH) Sensor Height from Station Base",
+        "Relative Humidity (RELH) Sensor Height AGL",
+
+        "Sea_level pressure (PMSL) Sensor Type",
+        "Sea_level pressure (PMSL) Sensor Brand",
+        "Sea_level pressure (PMSL) Sensor Model",
+        "Sea_level pressure (PMSL) Sensor Install Date",
+        "Sea_level pressure (PMSL) Sensor Height from Station Base",
+        "Sea_level pressure (PMSL) Sensor Height AGL",
+
+        "Temperature (TMPF) at 2 m Sensor Type",
+        "Temperature (TMPF) at 2 m Sensor Brand",
+        "Temperature (TMPF) at 2 m Sensor Model",
+        "Temperature (TMPF) at 2 m Sensor Install Date",
+        "Temperature (TMPF) at 2 m Sensor Height from Station Base",
+        "Temperature (TMPF) at 2 m Sensor Height AGL",
+
+        "Visibility (VSBY) Sensor Type",
+        "Visibility (VSBY) Sensor Brand",
+        "Visibility (VSBY) Sensor Model",
+        "Visibility (VSBY) Sensor Install Date",
+        "Visibility (VSBY) Sensor Height from Station Base",
+        "Visibility (VSBY) Sensor Height AGL",
+
+        "Weather conditions (WNUM) Sensor Type",
+        "Weather conditions (WNUM) Sensor Brand",
+        "Weather conditions (WNUM) Sensor Model",
+        "Weather conditions (WNUM) Sensor Install Date",
+        "Weather conditions (WNUM) Sensor Height from Station Base",
+        "Weather conditions (WNUM) Sensor Height AGL",
+
+        "Wind Direction (DRCT) at 10 m Sensor Type",
+        "Wind Direction (DRCT) at 10 m Sensor Brand",
+        "Wind Direction (DRCT) at 10 m Sensor Model",
+        "Wind Direction (DRCT) at 10 m Sensor Install Date",
+        "Wind Direction (DRCT) at 10 m Sensor Height from Station Base",
+        "Wind Direction (DRCT) at 10 m Sensor Height AGL",
+
+        "Wind Gust (GUST) at 10 m Sensor Type",
+        "Wind Gust (GUST) at 10 m Sensor Brand",
+        "Wind Gust (GUST) at 10 m Sensor Model",
+        "Wind Gust (GUST) at 10 m Sensor Install Date",
+        "Wind Gust (GUST) at 10 m Sensor Height from Station Base",
+        "Wind Gust (GUST) at 10 m Sensor Height AGL",
+
+        "Wind Speed (SKNT) at 10 m Sensor Type",
+        "Wind Speed (SKNT) at 10 m Sensor Brand",
+        "Wind Speed (SKNT) at 10 m Sensor Model",
+        "Wind Speed (SKNT) at 10 m Sensor Install Date", 
+        "Wind Speed (SKNT) at 10 m Sensor Height from Station Base",
+        "Wind Speed (SKNT) at 10 m Sensor Height AGL",
 ]
 
 def save_station_data(row, filename=CSV_FILENAME):
@@ -75,50 +196,6 @@ def get_station_ids(state):
     print(f"\n🔢 Jumlah kode station ditemukan: {len(station_ids)}")
     return station_ids
 
-
-# def get_station_info(station_id):
-#     url_station = f"{BASE_URL}cgi-bin/droman/station_total.cgi?stn={station_id}&unit=0"
-#     print(f"➡️ Memproses Station ID: {station_id} - URL: {url_station}")
-    
-#     response = requests.get(url_station, headers=HEADERS, cookies=COOKIES)
-#     soup = BeautifulSoup(response.content, 'html.parser')
-
-#     def get_value(label):
-#         tag = soup.find("b", string=label)
-#         if tag:
-#             value_td = tag.find_parent("td").find_next_sibling("td")
-#             return value_td.get_text(strip=True) if value_td else None
-#         return None
-
-#     station_name = get_value("Station Name:")
-#     station_id_text = get_value("Station ID:")
-#     county_text = get_value("County:")
-#     state_text = get_value("State:")
-#     country_text = get_value("Country:")
-#     timezone_text = get_value("Timezone:")
-#     local_Region_Category_text = get_value("Local Region Category:")
-#     nWS_Region_text = get_value("NWS Region:")
-#     nWS_CWA_text = get_value("NWS CWA:")
-#     nWS_Zone_text = get_value("NWS Zone:")
-#     nWS_Fire_Zone_text = get_value("NWS Fire Zone:")
-#     additional = get_value("Additional Site/Station Description:")
-
-#     data = {
-#         "Station Name": station_name,
-#         "Station ID": station_id_text,
-#         "County": county_text,
-#         "State": state_text,
-#         "Country": country_text,
-#         "Timezone": timezone_text,
-#         "Local Region Category": local_Region_Category_text,
-#         "NWS Region": nWS_Region_text,
-#         "NWS CWA": nWS_CWA_text,
-#         "NWS Zone": nWS_Zone_text,
-#         "NWS Fire Zone": nWS_Fire_Zone_text,
-#         "Additional Site/Station Description": additional        
-#     }
-#     data_save.append(data)
-#     print(f"✅ Data Station ID {station_id} berhasil diproses.")
     
 def get_station_info(station_id):
     url_station = f"{BASE_URL}cgi-bin/droman/station_total.cgi?stn={station_id}&unit=0"
@@ -166,117 +243,108 @@ def get_station_info(station_id):
             cols = row.find_all("td")
             if len(cols) == 2:
                 key = cols[0].get_text(strip=True).replace(":", "")
-                value = cols[1].get_text(strip=True)
+                value = cols[1].get_text(strip=True).replace("\x00", "")
                 table_data[key] = value
         return table_data
-
-    location_data = extract_table_by_label(soup, "Altimeter (ALTI) (Click to Hide)")
-    print(location_data)
-
-    # def get_value(label):
-    #     tag = soup.find("b", string=label)
-
-
-
-    # def get_sensor_table(soup, label_title):
-    #     # Cari elemen <u> dengan teks sesuai label yang ditarget
-    #     u_tag = soup.find("u", string=label_title)
-    #     if u_tag:
-    #         # Ambil elemen <div> saudara (sibling) terdekat yang berisi tabel sensor
-    #         div_id = u_tag.get("id").replace("hide", "tbl")  # "hide665" -> "tbl665"
-    #         div_tag = soup.find("div", id=div_id)
-    #         if div_tag:
-    #             table = div_tag.find("table")
-    #             if table:
-    #                 # Ambil semua baris dalam tabel
-    #                 rows = table.find_all("tr")
-    #                 sensor_data = {}
-    #                 for row in rows:
-    #                     cols = row.find_all("td")
-    #                     if len(cols) == 2:
-    #                         key = cols[0].get_text(strip=True).replace(":", "")
-    #                         value = cols[1].get_text(strip=True)
-    #                         sensor_data[key] = value
-    #                 return sensor_data
-    #     return None
-
-
-    # sensor_wind = get_sensor_table(get_sensor_table, "Wind Sensor (WSPD, WDIR) (Click to Hide)")
-    # print(sensor_wind)
-
-    # from bs4 import BeautifulSoup
-
-    # def get_sensor_table(soup, label_title):
-    #     u_tag = soup.find("u", string=label_title)
-    #     if u_tag:
-    #         div_id = u_tag.get("id").replace("hide", "tbl")
-    #         div_tag = soup.find("div", id=div_id)
-    #         if div_tag:
-    #             table = div_tag.find("table")
-    #             if table:
-    #                 rows = table.find_all("tr")
-    #                 sensor_data = {}
-    #                 for row in rows:
-    #                     cols = row.find_all("td")
-    #                     if len(cols) == 2:
-    #                         key = cols[0].get_text(strip=True).replace(":", "")
-    #                         value = cols[1].get_text(strip=True)
-    #                         sensor_data[key] = value
-    #                 return sensor_data
-    #     return None
-
-    # # contoh parsing html
-    # # html = """<html>...HTML di sini...</html>"""  # isi HTML yang kamu parse
-    # # soup = BeautifulSoup(html, "html.parser")
-
-    # sensor_wind = get_sensor_table(soup, "Wind Sensor (WSPD, WDIR) (Click to Hide)")
-    # print(sensor_wind)
-
-
-    # print(json.dumps(sensor_wind, indent=2))
-    # sensor_temp = get_sensor_table(sensors, "Temperature (TAIR) (Click to Hide)")
-
-    # sensor_altimeter = get_sensor_table(sensors, "Altimeter (ALTI) (Click to Hide)")
-    # print(json.dumps(sensor_altimeter, indent=2))
-
-
-    # def get_value_Additional(label_):
-    #     tag = soup.find("b", string=label_)
-    #     if tag:
-    #         value_td = tag.find_parent("td").find_next_sibling("tr")
-    #         return value_td.get_text(strip=False) if value_td else None
-    #     return None
     
-    # def get_additional_html(soup):
-    #     label_tag = soup.find("b", string="Additional Site/Station Description:")
-    #     if label_tag:
-    #         tr = label_tag.find_parent("tr")
-    #         if tr:
-    #             next_tr = tr.find_next_sibling("tr")
-    #             if next_tr:
-    #                 return str(next_tr)
-    #     return None
+    try:
+        altimeter_data = extract_table_by_label(soup, "Altimeter (ALTI) (Click to Hide)")
+        # print(altimeter_data)
+    except Exception as e:
+        print(f"Error extracting altimeter data: {e}")
 
-    # Kemudian gunakan saat membangun data dict
-    # data = {
-    #     "Station Name": get_value("Station Name:"),
-    #     "Station ID": get_value("Station ID:"),
-    #     "County": get_value("County:"),
-    #     "State": get_value("State:"),
-    #     "Country": get_value("Country:"),
-    #     "Timezone": get_value("Timezone:"),
-    #     "Local Region Category": get_value("Local Region Category:"),
-    #     "NWS Region": get_value("NWS Region:"),
-    #     "NWS CWA": get_value("NWS CWA:"),
-    #     "NWS Zone": get_value("NWS Zone:"),
-    #     "NWS Fire Zone": get_value("NWS Fire Zone:"),
-    #     "GACC Region": get_value("GACC Region:"),
-    # }
-    # location_data = extract_table_by_label(soup, "Altimeter (ALTI) (Click to Hide)")
+    # altimeter_data = extract_table_by_label(soup, "Altimeter (ALTI) (Click to Hide)")
+    # print(altimeter_data)
+    try:
+        ceiling_data = extract_table_by_label(soup, "Ceiling (CIG) (Click to Hide)")
+        # print(ceiling_data)
+    except Exception as e:
+        print(f"Error extracting ceiling data: {e}")
+    
+
+    try:
+        precipitation_1hr_data = extract_table_by_label(soup, "Precipitation 1hr (P01I) (Click to Hide)")
+        # print(precipitation_1hr_data)
+    except Exception as e:
+        print(f"Error extracting precipitation 1hr data: {e}")
+    
+    try:
+        precipitation_2hr_data = extract_table_by_label(soup, "Precipitation 24hr (P24I) (Click to Hide)")
+        # print(precipitation_2hr_data)
+    except Exception as e:
+        print(f"Error extracting precipitation 2hr data: {e}")
+    
+    try:
+        precipitation_3hr_data = extract_table_by_label(soup, "Precipitation 3hr (P03I) (Click to Hide)")
+        # print(precipitation_3hr_data)
+    except Exception as e:
+        print(f"Error extracting precipitation 3hr data: {e}")
+    
+    try:
+        precipitation_6hr_data = extract_table_by_label(soup, "Precipitation 6hr (P06I) (Click to Hide)")
+        # print(precipitation_6hr_data)
+    except Exception as e:
+        print(f"Error extracting precipitation 6hr data: {e}")
+    
+    try:
+        pressure_change_PCHA = extract_table_by_label(soup, "Pressure change (PCHA) (Click to Hide)")    
+        # print(pressure_change_PCHA)
+    except Exception as e:
+        print(f"Error extracting pressure change data: {e}")
+    
+    try:
+        pressure_Tendency_P03D = extract_table_by_label(soup, "Pressure Tendency (P03D) (Click to Hide)")
+        # print(pressure_Tendency_P03D)
+    except Exception as e:
+        print(f"Error extracting pressure tendency data: {e}")
+    try:
+        relative_Humidity_RELH = extract_table_by_label(soup, "Relative Humidity (RELH) (Click to Hide)")
+        # print(relative_Humidity_RELH)
+    except Exception as e:
+        print(f"Error extracting relative humidity data: {e}")
+    try:
+        sea_level_pressure_PMSL = extract_table_by_label(soup, "Sea_level pressure (PMSL) (Click to Hide)")
+        # print(sea_level_pressure_PMSL)
+    except Exception as e:
+        print(f"Error extracting sea level pressure data: {e}")
+    try:
+        temperature_TMPF_at_2_m = extract_table_by_label(soup, "Temperature (TMPF) at 2 m (Click to Hide)")
+        # print(temperature_TMPF_at_2_m)
+    except Exception as e:
+        print(f"Error extracting temperature data: {e}")
+    
+    try:
+        visibility_VSBY = extract_table_by_label(soup, "Visibility (VSBY) (Click to Hide)")
+        # print(visibility_VSBY)
+    except Exception as e:
+        print(f"Error extracting visibility data: {e}")
+    
+    try:
+        weather_conditions_WNUM = extract_table_by_label(soup, "Weather conditions (WNUM) (Click to Hide)")
+        # print(weather_conditions_WNUM)
+    except Exception as e:
+        print(f"Error extracting weather conditions data: {e}")
+    try:        
+        wind_Direction_DRCT = extract_table_by_label(soup, "Wind Direction (DRCT) at 10 m (Click to Hide)")
+        # print(wind_Direction_DRCT)
+    except Exception as e:
+        print(f"Error extracting wind direction data: {e}")
+    try:
+        wind_Gust_GUST_at_10_m = extract_table_by_label(soup, "Wind Gust (GUST) at 10 m (Click to Hide)")
+        # print(wind_Gust_GUST_at_10_m)
+    except Exception as e:
+        print(f"Error extracting wind gust data: {e}")
+    try:
+        wind_Speed_SKNT_at_10_m = extract_table_by_label(soup, "Wind Speed (SKNT) at 10 m (Click to Hide)")
+        # print(wind_Speed_SKNT_at_10_m)
+    except Exception as e:
+        print(f"Error extracting wind speed data: {e}")
+
     
     data = {
         "Station Name": get_value("Station Name:"),
         "Station ID": get_value("Station ID:"),
+        "Mesonet ID": get_value("Mesonet ID:"),
         "County": get_value("County:"),
         "State": get_value("State:"),
         "Country": get_value("Country:"),
@@ -288,29 +356,139 @@ def get_station_info(station_id):
         "NWS Fire Zone": get_value("NWS Fire Zone:"),
         "GACC Region": get_value("GACC Region:"),
         "SUBGACC Region": get_value("SUBGACC Region:"),
-        "In service date": get_value("First Date in MesoWest:"),
-        "Last maintenance": get_value("Last Metadata Update:"),
-        "Calibration date": get_value("Calibrated:"),
-        "Sensor Type": location_data["Sensor Type"],
-        "Sensor Brand": location_data["Brand"],
-        "Sensor Model": location_data["Model"],
+        "Latitude": f"'{get_value('Latitude:')}",
+        "Longitude": f"'{get_value('Longitude:')}",        
+        "Elevation":f"'{get_value('Elevation:')}",
+        "Installed": f"'{get_value('Installed:')}",
+        "Calibration date": f"'{get_value('Calibrated:')}",
+        "In service date": f"'{get_value('First Date in MesoWest:')}",
+        "Last maintenance": f"'{get_value('Last Metadata Update:')}",       
+
+        "Altimeter Sensor Type": altimeter_data.get("Sensor Type") if altimeter_data else " ",
+        "Altimeter Sensor Brand": altimeter_data.get("Brand") if altimeter_data else " ",
+        "Altimeter Sensor Model": altimeter_data.get("Model") if altimeter_data else " ",
+        "Altimeter Sensor Install Date": f"'{altimeter_data.get('Install Date')}" if altimeter_data else " ",
+        "Altimeter Sensor Height from Station Base": altimeter_data.get("Sensor Height from Station Base") if altimeter_data else " ",
+        "Altimeter Sensor Height AGL": altimeter_data.get("Sensor Height AGL") if altimeter_data else " ",
+        
+        "Ceiling Sensor Type": ceiling_data.get("Sensor Type") if ceiling_data else " ",
+        "Ceiling Sensor Brand": ceiling_data.get("Brand") if ceiling_data else " ",
+        "Ceiling Sensor Model": ceiling_data.get("Model") if ceiling_data else " ",
+        "Ceiling Sensor Install Date": f"'{ceiling_data.get('Install Date')}" if ceiling_data else " ",
+        "Ceiling Sensor Height from Station Base": ceiling_data.get("Sensor Height from Station Base") if ceiling_data else " ",
+        "Ceiling Sensor Height AGL": ceiling_data.get("Sensor Height AGL") if ceiling_data else " ",
+                
+        "Precipitation 1hr Sensor Type": precipitation_1hr_data.get("Sensor Type") if precipitation_1hr_data else " ",
+        "Precipitation 1hr Sensor Brand": precipitation_1hr_data.get("Brand") if precipitation_1hr_data else " ",
+        "Precipitation 1hr Sensor Model": precipitation_1hr_data.get("Model") if precipitation_1hr_data else " ",
+        "Precipitation 1hr Sensor Install Date": f"'{precipitation_1hr_data.get('Install Date')}" if precipitation_1hr_data else " ",
+        "Precipitation 1hr Sensor Height from Station Base": precipitation_1hr_data.get("Sensor Height from Station Base") if precipitation_1hr_data else " ",
+        "Precipitation 1hr Sensor Height AGL": precipitation_1hr_data.get("Sensor Height AGL") if precipitation_1hr_data else " ",
+
+        "Precipitation 2hr Sensor Type": precipitation_2hr_data.get("Sensor Type") if precipitation_2hr_data else " ",
+        "Precipitation 2hr Sensor Brand": precipitation_2hr_data.get("Brand") if precipitation_2hr_data else " ",
+        "Precipitation 2hr Sensor Model": precipitation_2hr_data.get("Model") if precipitation_2hr_data else " ",
+        "Precipitation 2hr Sensor Install Date": f"'{precipitation_2hr_data.get('Install Date')}" if precipitation_2hr_data else " ",
+        "Precipitation 2hr Sensor Height from Station Base": precipitation_2hr_data.get("Sensor Height from Station Base") if precipitation_2hr_data else " ",
+        "Precipitation 2hr Sensor Height AGL": precipitation_2hr_data.get("Sensor Height AGL") if precipitation_2hr_data else " ",
+
+        "Precipitation 3hr Sensor Type": precipitation_3hr_data.get("Sensor Type") if precipitation_3hr_data else " ",
+        "Precipitation 3hr Sensor Brand": precipitation_3hr_data.get("Brand") if precipitation_3hr_data else " ",
+        "Precipitation 3hr Sensor Model": precipitation_3hr_data.get("Model") if precipitation_3hr_data else " ",
+        "Precipitation 3hr Sensor Install Date": f"'{precipitation_3hr_data.get('Install Date')}" if precipitation_3hr_data else " ",
+        "Precipitation 3hr Sensor Height from Station Base": precipitation_3hr_data.get("Sensor Height from Station Base") if precipitation_3hr_data else " ",
+        "Precipitation 3hr Sensor Height AGL": precipitation_3hr_data.get("Sensor Height AGL") if precipitation_3hr_data else " ",
+
+        "Precipitation 6hr Sensor Type": precipitation_6hr_data.get("Sensor Type") if precipitation_6hr_data else " ",
+        "Precipitation 6hr Sensor Brand": precipitation_6hr_data.get("Brand") if precipitation_6hr_data else " ",
+        "Precipitation 6hr Sensor Model": precipitation_6hr_data.get("Model") if precipitation_6hr_data else " ",
+        "Precipitation 6hr Sensor Install Date": f"'{precipitation_6hr_data.get('Install Date')}" if precipitation_6hr_data else " ",
+        "Precipitation 6hr Sensor Height from Station Base": precipitation_6hr_data.get("Sensor Height from Station Base") if precipitation_6hr_data else " ",
+        "Precipitation 6hr Sensor Height AGL": precipitation_6hr_data.get("Sensor Height AGL") if precipitation_6hr_data else " ",
+
+        "Pressure change (PCHA) Sensor Type": pressure_change_PCHA.get("Sensor Type") if pressure_change_PCHA else " ",
+        "Pressure change (PCHA) Sensor Brand": pressure_change_PCHA.get("Brand") if pressure_change_PCHA else " ",
+        "Pressure change (PCHA) Sensor Model": pressure_change_PCHA.get("Model") if pressure_change_PCHA else " ",
+        "Pressure change (PCHA) Sensor Install Date": f"'{pressure_change_PCHA.get('Install Date')}" if pressure_change_PCHA else " ",
+        "Pressure change (PCHA) Sensor Height from Station Base": pressure_change_PCHA.get("Sensor Height from Station Base") if pressure_change_PCHA else " ",
+        "Pressure change (PCHA) Sensor Sensor Height AGL": pressure_change_PCHA.get("Sensor Height AGL") if pressure_change_PCHA else " ",
+
+        "Pressure Tendency (P03D) Sensor Type": pressure_Tendency_P03D.get("Sensor Type") if pressure_Tendency_P03D else " ",
+        "Pressure Tendency (P03D) Sensor Brand": pressure_Tendency_P03D.get("Brand") if pressure_Tendency_P03D else " ",
+        "Pressure Tendency (P03D) Sensor Model": pressure_Tendency_P03D.get("Model") if pressure_Tendency_P03D else " ",
+        "Pressure Tendency (P03D) Sensor Install Date": f"'{pressure_Tendency_P03D.get('Install Date')}" if pressure_Tendency_P03D else " ",
+        "Pressure Tendency (P03D) Sensor Height from Station Base": pressure_Tendency_P03D.get("Sensor Height from Station Base") if pressure_Tendency_P03D else " ",
+        "Pressure Tendency (P03D) Sensor Height AGL": pressure_Tendency_P03D.get("Sensor Height AGL") if pressure_Tendency_P03D else " ",
+
+        "Relative Humidity (RELH) Sensor Type": relative_Humidity_RELH.get("Sensor Type") if relative_Humidity_RELH else " ",
+        "Relative Humidity (RELH) Sensor Brand": relative_Humidity_RELH.get("Brand") if relative_Humidity_RELH else " ",
+        "Relative Humidity (RELH) Sensor Model": relative_Humidity_RELH.get("Model") if relative_Humidity_RELH else " ",
+        "Relative Humidity (RELH) Sensor Install Date": f"'{relative_Humidity_RELH.get('Install Date')}" if relative_Humidity_RELH else " ",
+        "Relative Humidity (RELH) Sensor Height from Station Base": relative_Humidity_RELH.get("Sensor Height from Station Base") if relative_Humidity_RELH else " ",
+        "Relative Humidity (RELH) Sensor Height AGL": relative_Humidity_RELH.get("Sensor Height AGL") if relative_Humidity_RELH else " ",
+
+        "Sea_level pressure (PMSL) Sensor Type": sea_level_pressure_PMSL.get("Sensor Type") if sea_level_pressure_PMSL else " ",
+        "Sea_level pressure (PMSL) Sensor Brand": sea_level_pressure_PMSL.get("Brand") if sea_level_pressure_PMSL else " ",
+        "Sea_level pressure (PMSL) Sensor Model": sea_level_pressure_PMSL.get("Model") if sea_level_pressure_PMSL else " ",
+        "Sea_level pressure (PMSL) Sensor Install Date": f"'{sea_level_pressure_PMSL.get('Install Date')}" if sea_level_pressure_PMSL else " ",
+        "Sea_level pressure (PMSL) Sensor Height from Station Base": sea_level_pressure_PMSL.get("Sensor Height from Station Base") if sea_level_pressure_PMSL else " ",
+        "Sea_level pressure (PMSL) Sensor Height AGL": sea_level_pressure_PMSL.get("Sensor Height AGL") if sea_level_pressure_PMSL else " ",
+
+        "Temperature (TMPF) at 2 m Sensor Type": temperature_TMPF_at_2_m.get("Sensor Type") if temperature_TMPF_at_2_m else " ",
+        "Temperature (TMPF) at 2 m Sensor Brand": temperature_TMPF_at_2_m.get("Brand") if temperature_TMPF_at_2_m else " ",
+        "Temperature (TMPF) at 2 m Sensor Model": temperature_TMPF_at_2_m.get("Model") if temperature_TMPF_at_2_m else " ",
+        "Temperature (TMPF) at 2 m Sensor Install Date": f"'{temperature_TMPF_at_2_m.get('Install Date')}" if temperature_TMPF_at_2_m else " ",
+        "Temperature (TMPF) at 2 m Sensor Height from Station Base": temperature_TMPF_at_2_m.get("Sensor Height from Station Base") if temperature_TMPF_at_2_m else " ",
+        "Temperature (TMPF) at 2 m Sensor Height AGL": temperature_TMPF_at_2_m.get("Sensor Height AGL") if temperature_TMPF_at_2_m else " ",        
+
+        "Visibility (VSBY) Sensor Type": visibility_VSBY.get("Sensor Type") if visibility_VSBY else " ",
+        "Visibility (VSBY) Sensor Brand": visibility_VSBY.get("Brand") if visibility_VSBY else " ",
+        "Visibility (VSBY) Sensor Model": visibility_VSBY.get("Model") if visibility_VSBY else " ",
+        "Visibility (VSBY) Sensor Install Date": f"'{visibility_VSBY.get('Install Date')}" if visibility_VSBY else " ",
+        "Visibility (VSBY) Sensor Height from Station Base": visibility_VSBY.get("Sensor Height from Station Base") if visibility_VSBY else " ",
+        "Visibility (VSBY) Sensor Height AGL": visibility_VSBY.get("Sensor Height AGL") if visibility_VSBY else " ",
+
+        "Weather conditions (WNUM) Sensor Type": weather_conditions_WNUM.get("Sensor Type") if weather_conditions_WNUM else " ",
+        "Weather conditions (WNUM) Sensor Brand": weather_conditions_WNUM.get("Brand") if weather_conditions_WNUM else " ",
+        "Weather conditions (WNUM) Sensor Model": weather_conditions_WNUM.get("Model") if weather_conditions_WNUM else " ",
+        "Weather conditions (WNUM) Sensor Install Date": f"'{weather_conditions_WNUM.get('Install Date')}" if weather_conditions_WNUM else " ",
+        "Weather conditions (WNUM) Sensor Height from Station Base": weather_conditions_WNUM.get("Sensor Height from Station Base") if weather_conditions_WNUM else " ",
+        "Weather conditions (WNUM) Sensor Height AGL": weather_conditions_WNUM.get("Sensor Height AGL") if weather_conditions_WNUM else " ",
+
+        "Wind Direction (DRCT) at 10 m Sensor Type": wind_Direction_DRCT.get("Sensor Type") if wind_Direction_DRCT else " ",
+        "Wind Direction (DRCT) at 10 m Sensor Brand": wind_Direction_DRCT.get("Brand") if wind_Direction_DRCT else " ",
+        "Wind Direction (DRCT) at 10 m Sensor Model": wind_Direction_DRCT.get("Model") if wind_Direction_DRCT else " ",
+        "Wind Direction (DRCT) at 10 m Sensor Install Date": f"'{wind_Direction_DRCT.get('Install Date')}" if wind_Direction_DRCT else " ",
+        "Wind Direction (DRCT) at 10 m Sensor Height from Station Base": wind_Direction_DRCT.get("Sensor Height from Station Base") if wind_Direction_DRCT else " ",
+        "Wind Direction (DRCT) at 10 m Sensor Height AGL": wind_Direction_DRCT.get("Sensor Height AGL") if wind_Direction_DRCT else " ",
+
+        "Wind Gust (GUST) at 10 m Sensor Type": wind_Gust_GUST_at_10_m.get("Sensor Type") if wind_Gust_GUST_at_10_m else " ",
+        "Wind Gust (GUST) at 10 m Sensor Brand": wind_Gust_GUST_at_10_m.get("Brand") if wind_Gust_GUST_at_10_m else " ",
+        "Wind Gust (GUST) at 10 m Sensor Model": wind_Gust_GUST_at_10_m.get("Model") if wind_Gust_GUST_at_10_m else " ",
+        "Wind Gust (GUST) at 10 m Sensor Install Date": f"'{wind_Gust_GUST_at_10_m.get('Install Date')}" if wind_Gust_GUST_at_10_m else " ",
+        "Wind Gust (GUST) at 10 m Sensor Height from Station Base": wind_Gust_GUST_at_10_m.get("Sensor Height from Station Base") if wind_Gust_GUST_at_10_m else " ",
+        "Wind Gust (GUST) at 10 m Sensor Height AGL": wind_Gust_GUST_at_10_m.get("Sensor Height AGL") if wind_Gust_GUST_at_10_m else " ",
+
+        "Wind Speed (SKNT) at 10 m Sensor Type": wind_Speed_SKNT_at_10_m.get("Sensor Type") if wind_Speed_SKNT_at_10_m else " ",
+        "Wind Speed (SKNT) at 10 m Sensor Brand": wind_Speed_SKNT_at_10_m.get("Brand") if wind_Speed_SKNT_at_10_m else " ",
+        "Wind Speed (SKNT) at 10 m Sensor Model": wind_Speed_SKNT_at_10_m.get("Model") if wind_Speed_SKNT_at_10_m else " ",
+        "Wind Speed (SKNT) at 10 m Sensor Install Date": f"'{wind_Speed_SKNT_at_10_m.get('Install Date')}" if wind_Speed_SKNT_at_10_m else " ", 
+        "Wind Speed (SKNT) at 10 m Sensor Height from Station Base": wind_Speed_SKNT_at_10_m.get("Sensor Height from Station Base") if wind_Speed_SKNT_at_10_m else " ",
+        "Wind Speed (SKNT) at 10 m Sensor Height AGL": wind_Speed_SKNT_at_10_m.get("Sensor Height AGL") if wind_Speed_SKNT_at_10_m else " ",
+
     }
 
-    for key, value in data.items():
-        if value:
-            print(f"{key}: {value}")
-        else:
-            print(f"{key}: Data tidak tersedia")
-            print("")
-            print("")
+    # for key, value in data.items():
+    #     if value:
+    #         print(f"{key}: {value}")
+    #     else:
+    #         print(f"{key}: Data tidak tersedia")
+    #         print("")
+    #         print("")
 
 
-
-
-
-
-    # save_station_data(data)  # 💾 Simpan langsung
-    # print(f"✅ Data Station ID {station_id} berhasil diproses.")
+    save_station_data(data)  # 💾 Simpan langsung
+    print(f"✅ Data Station ID {station_id} berhasil diproses.")
 
 
 
