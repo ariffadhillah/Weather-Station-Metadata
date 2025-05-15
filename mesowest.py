@@ -4,6 +4,7 @@ from urllib.parse import urlparse, parse_qs
 import csv
 import os
 import json
+from urllib.parse import urljoin
 
 BASE_URL = "https://mesowest.utah.edu/"
 HEADERS = {
@@ -16,6 +17,9 @@ COOKIES = {
 
 data_save = []
 CSV_FILENAME = "University of Utah.csv"
+
+output_folder = "img University of Utah"
+os.makedirs(output_folder, exist_ok=True)
 
 FIELDNAMES = [
         "Station Name",
@@ -203,6 +207,35 @@ def get_station_info(station_id):
     
     response = requests.get(url_station, headers=HEADERS, cookies=COOKIES)
     soup = BeautifulSoup(response.content, 'html.parser')
+    page_url = 'https://mesowest.utah.edu'
+
+    # Temukan elemen gambar
+    img_tag = soup.select_one("div#map img")
+    if img_tag and img_tag.get("src"):
+        img_src = img_tag["src"]
+        img_url = urljoin(page_url, img_src)  # Buat URL absolut
+
+        # Ambil nama file dari URL
+        basename = os.path.basename(urlparse(img_url).path)  # Contoh: KPRN.jpeg
+
+        # Tambahkan prefix jika diinginkan
+        prefix = "example-"
+        filename = prefix + basename  # Contoh: example-KPRN.jpeg
+
+        # Buat path lengkap untuk menyimpan gambar
+        save_path = os.path.join(output_folder, filename)
+
+        # Unduh gambar
+        img_response = requests.get(img_url)
+        if img_response.status_code == 200:
+            with open(save_path, "wb") as f:
+                f.write(img_response.content)
+            print(f"Gambar berhasil disimpan: {save_path}")
+        else:
+            print("Gagal mengunduh gambar.")
+    else:
+        print("Gambar tidak ditemukan di dalam <div id='map'>.")
+
 
     def get_value(label):
         tag = soup.find("b", string=label)
@@ -514,7 +547,7 @@ def main():
             print(f"\n🔍 [{j}] Info Station:")
             get_station_info(station_id)
         
-        break  # hapus ini jika ingin proses semua state
+        # break  # hapus ini jika ingin proses semua state
 
 
 if __name__ == "__main__":
