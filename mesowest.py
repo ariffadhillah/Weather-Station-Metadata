@@ -18,8 +18,8 @@ COOKIES = {
 data_save = []
 CSV_FILENAME = "University of Utah.csv"
 
-output_folder = "img University of Utah"
-os.makedirs(output_folder, exist_ok=True)
+# output_folder = "img University of Utah"
+# os.makedirs(output_folder, exist_ok=True)
 
 FIELDNAMES = [
         "Station Name",
@@ -207,34 +207,34 @@ def get_station_info(station_id):
     
     response = requests.get(url_station, headers=HEADERS, cookies=COOKIES)
     soup = BeautifulSoup(response.content, 'html.parser')
-    page_url = 'https://mesowest.utah.edu'
+    # page_url = 'https://mesowest.utah.edu'
 
-    # Temukan elemen gambar
-    img_tag = soup.select_one("div#map img")
-    if img_tag and img_tag.get("src"):
-        img_src = img_tag["src"]
-        img_url = urljoin(page_url, img_src)  # Buat URL absolut
+    # # Temukan elemen gambar
+    # img_tag = soup.select_one("div#map img")
+    # if img_tag and img_tag.get("src"):
+    #     img_src = img_tag["src"]
+    #     img_url = urljoin(page_url, img_src)  # Buat URL absolut
 
-        # Ambil nama file dari URL
-        basename = os.path.basename(urlparse(img_url).path)  # Contoh: KPRN.jpeg
+    #     # Ambil nama file dari URL
+    #     basename = os.path.basename(urlparse(img_url).path)  # Contoh: KPRN.jpeg
 
-        # Tambahkan prefix jika diinginkan
-        prefix = "example-"
-        filename = prefix + basename  # Contoh: example-KPRN.jpeg
+    #     # Tambahkan prefix jika diinginkan
+    #     prefix = "example-"
+    #     filename = prefix + basename  # Contoh: example-KPRN.jpeg
 
-        # Buat path lengkap untuk menyimpan gambar
-        save_path = os.path.join(output_folder, filename)
+    #     # Buat path lengkap untuk menyimpan gambar
+    #     save_path = os.path.join(output_folder, filename)
 
-        # Unduh gambar
-        img_response = requests.get(img_url)
-        if img_response.status_code == 200:
-            with open(save_path, "wb") as f:
-                f.write(img_response.content)
-            print(f"Gambar berhasil disimpan: {save_path}")
-        else:
-            print("Gagal mengunduh gambar.")
-    else:
-        print("Gambar tidak ditemukan di dalam <div id='map'>.")
+    #     # Unduh gambar
+    #     img_response = requests.get(img_url)
+    #     if img_response.status_code == 200:
+    #         with open(save_path, "wb") as f:
+    #             f.write(img_response.content)
+    #         print(f"Gambar berhasil disimpan: {save_path}")
+    #     else:
+    #         print("Gagal mengunduh gambar.")
+    # else:
+    #     print("Gambar tidak ditemukan di dalam <div id='map'>.")
 
 
     def get_value(label):
