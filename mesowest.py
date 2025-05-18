@@ -16,7 +16,7 @@ COOKIES = {
 
 
 data_save = []
-CSV_FILENAME = "University of Utah.csv"
+CSV_FILENAME = "University of Utah---test.csv"
 
 # output_folder = "img University of Utah"
 # os.makedirs(output_folder, exist_ok=True)
@@ -511,13 +511,13 @@ def get_station_info(station_id):
 
     }
 
-    # for key, value in data.items():
-    #     if value:
-    #         print(f"{key}: {value}")
-    #     else:
-    #         print(f"{key}: Data tidak tersedia")
-    #         print("")
-    #         print("")
+    for key, value in data.items():
+        if value:
+            print(f"{key}: {value}")
+        else:
+            print(f"{key}: Data tidak tersedia")
+            print("")
+            print("")
 
 
     save_station_data(data)  # 💾 Simpan langsung
