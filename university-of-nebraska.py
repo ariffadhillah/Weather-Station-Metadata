@@ -5,7 +5,8 @@ import csv
 import os
 import json
 import re
-
+from pathlib import Path
+from urllib.parse import urlsplit
 
 BASE_URL = "https://mesonet.unl.edu/"
 HEADERS = {
@@ -56,7 +57,34 @@ def extract_drupal_settings(html):
     print("Drupal.settings tidak ditemukan.")
     return None
 
-import json
+
+def download_images(name, station_id, image_urls, folder="University of Nebraska"):
+    # Buat folder jika belum ada
+    os.makedirs(folder, exist_ok=True)
+    
+    for url in image_urls:
+        try:
+            # Ekstrak nama file asli (misal: image_01.png)
+            filename = os.path.basename(urlsplit(url).path)
+            extension = Path(filename).suffix  # .png, .jpg, dll
+
+            # Format nama file: name-id-image_01.png
+            save_name = f"{name.strip().replace(' ', '_')}-{station_id}-{filename}"
+            save_path = os.path.join(folder, save_name)
+
+            # Download dan simpan
+            response = requests.get(url)
+            response.raise_for_status()
+
+            with open(save_path, "wb") as f:
+                f.write(response.content)
+
+            print(f"[✔] Gambar disimpan: {save_path}")
+        
+        except Exception as e:
+            print(f"[✘] Gagal download {url}: {e}")
+
+
 
 def print_full_point_data(point):
     print("\n===== DATA POINT =====")
@@ -107,38 +135,6 @@ def print_full_point_data(point):
 
     print("=" * 40)
 
-
-# def extract_data_from_url(html, url=None):
-#     soup = BeautifulSoup(html, 'html.parser')
-#     drupal_data = extract_drupal_settings(html)
-
-#     if drupal_data:
-#         print("Theme:", drupal_data.get("ajaxPageState", {}).get("theme"))
-#         print("Token:", drupal_data.get("ajaxPageState", {}).get("theme_token"))
-
-#         points_data = drupal_data.get("mesonet", {}).get("graph", {}).get("points", {})
-
-#         if points_data:
-#             print("\nData Points:")
-#             for point_id, raw_point in points_data.items():
-#                 try:
-#                     point = json.loads(raw_point)
-
-#                     conditions = point.get("conditions")
-#                     if conditions:
-#                         print(f"ID: {point_id}")
-#                         print("Name:", conditions.get("Name"))
-#                         print("Latitude:", conditions.get("Latitude"))
-#                         print("Longitude:", conditions.get("Longitude"))
-#                         print("Temperature:", conditions.get("Temperature"))
-#                         print("Dewpoint:", conditions.get("Dewpoint"))
-#                         print("Relative Humidity:", conditions.get("Relative Humidity"))
-#                         print("images:", conditions.get("images"))
-#                         print("-" * 40)
-#                     else:
-#                         print(f"ID: {point_id} - Tidak ada 'conditions'")
-#                 except json.JSONDecodeError as e:
-#                     print(f"Error decoding point {point_id}: {e}")
 
 def extract_data_from_url(html, url=None):
     soup = BeautifulSoup(html, 'html.parser')
