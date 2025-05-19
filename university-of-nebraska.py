@@ -18,8 +18,28 @@ COOKIES = {
 
 CSV_FILENAME = "University of Nebraska.csv"
 FIELDNAMES = [
-        "Station Name", "County", "State", "Latitude", "Longitude", "Elevation", "In service date", "Status"
+            "Station Name", "Latitude", "Longitude", "Elevation","In service date","Status","Client"
 ]
+
+def print_sensor_data(data_dict):
+    for key, value in data_dict.items():
+        if value and value.strip():
+            print(f"{key}: {value}")
+        else:
+            print(f"{key}: Data tidak tersedia")
+    print()  # Tambah baris kosong setelah print selesai
+
+def save_station_data(row, filename=CSV_FILENAME):
+    file_exists = os.path.isfile(filename)
+    
+    with open(filename, mode="a", newline="", encoding="utf-8-sig") as file:
+        writer = csv.DictWriter(file, fieldnames=FIELDNAMES)
+        
+        if not file_exists or os.stat(filename).st_size == 0:
+            writer.writeheader()
+        
+        writer.writerow(row)
+        file.flush()
 
 
 def get_html(url):
@@ -56,34 +76,6 @@ def extract_drupal_settings(html):
 
     print("Drupal.settings tidak ditemukan.")
     return None
-
-
-def download_images(name, station_id, image_urls, folder="University of Nebraska"):
-    # Buat folder jika belum ada
-    os.makedirs(folder, exist_ok=True)
-    
-    for url in image_urls:
-        try:
-            # Ekstrak nama file asli (misal: image_01.png)
-            filename = os.path.basename(urlsplit(url).path)
-            extension = Path(filename).suffix  # .png, .jpg, dll
-
-            # Format nama file: name-id-image_01.png
-            save_name = f"{name.strip().replace(' ', '_')}-{station_id}-{filename}"
-            save_path = os.path.join(folder, save_name)
-
-            # Download dan simpan
-            response = requests.get(url)
-            response.raise_for_status()
-
-            with open(save_path, "wb") as f:
-                f.write(response.content)
-
-            print(f"[✔] Gambar disimpan: {save_path}")
-        
-        except Exception as e:
-            print(f"[✘] Gagal download {url}: {e}")
-
 
 
 def print_full_point_data(point):
@@ -136,6 +128,31 @@ def print_full_point_data(point):
     print("=" * 40)
 
 
+def download_images(image_urls, name, station_id, folder="University of Nebraska"):
+    if not isinstance(image_urls, list):
+        print("❌ image_urls bukan list, melainkan:", type(image_urls))
+        return
+    
+    if not os.path.exists(folder):
+        os.makedirs(folder)
+    
+    for idx, url in enumerate(image_urls, 1):
+        try:
+            print(f"[↓] Mendownload dari: {url}")
+            response = requests.get(url)
+            response.raise_for_status()
+            
+            # Ekstensi dari URL (png, jpg, dll)
+            ext = url.split('.')[-1].split("?")[0]
+            filename = f"{name}-{station_id}-image_{idx}.{ext}"
+            filepath = os.path.join(folder, filename)
+
+            with open(filepath, 'wb') as f:
+                f.write(response.content)
+            print(f"[✔] Tersimpan: {filepath}")
+        except Exception as e:
+            print(f"[✘] Gagal download {url}: {e}")
+
 def extract_data_from_url(html, url=None):
     soup = BeautifulSoup(html, 'html.parser')
     drupal_data = extract_drupal_settings(html)
@@ -165,26 +182,83 @@ def extract_data_from_url(html, url=None):
         images = point.get("images", [])
         image_urls = "\n".join(images) if images else ""
 
-        # Buat dictionary data_save
+        station_id = point.get("id", "").strip()
+        name = desc.get("Name", "").strip()
+        period = desc.get("Period of Record", "")
+
+
+
+        # Inisialisasi
+        period_only = period.strip()
+        status = ""
+
+        # Coba ekstrak tanggal lengkap (YYYY-MM-DD) dari awal string
+        match = re.search(r"\d{4}-\d{2}-\d{2}", period)
+        if match:
+            period_only = match.group(0)
+
+        # Coba ambil status dari bagian akhir (misalnya "Present")
+        if "-" in period:
+            parts = [p.strip() for p in period.split("-")]
+            if len(parts) >= 2:
+                last_part = parts[-1]
+                if "Present" in last_part or "present" in last_part:
+                    status = last_part
+
         data_save = {
-            "ID": point.get("id", ""),
-            "Name": desc.get("Name", ""),
+            "Station ID": station_id,
+            "Station Name": name,
             "Latitude": desc.get("Latitude", ""),
             "Longitude": desc.get("Longitude", ""),
             "Elevation": desc.get("Elevation", ""),
+            "In service date": period_only,
+            "Status": status,
             "Client": desc.get("Client", ""),
             "all image url": image_urls
         }
+        # print(data_save)
+        image_urls_list = image_urls.splitlines()
 
+        # Gunakan folder tetap
+        folder_name = "University of Nebraska"
+        if not os.path.exists(folder_name):
+            os.makedirs(folder_name)
 
-        # Cetak hasil
-        print("\n===== DATA POINT =====")
-        for key, value in data_save.items():
-            if value.strip():
-                print(f"{key}: {value}")
-            else:
-                print(f"{key}: Data tidak tersedia")
-        print("=" * 40)
+        # Bersihkan nama untuk digunakan di nama file
+        safe_name = name.replace(" ", "_").replace("/", "-")
+
+        # Download dan simpan gambar
+        for url in image_urls_list:
+            filename_from_url = url.split('/')[-1]
+            base, ext = os.path.splitext(filename_from_url)
+
+            new_filename = f"{safe_name}-{station_id}-{base}{ext}"
+            save_path = os.path.join(folder_name, new_filename)
+
+            try:
+                response = requests.get(url)
+                if response.status_code == 200:
+                    with open(save_path, 'wb') as f:
+                        f.write(response.content)
+                    print(f"Saved: {save_path}")
+                else:
+                    print(f"Failed to download (status {response.status_code}): {url}")
+            except Exception as e:
+                print(f"Error downloading {url}: {e}")
+
+        # # Cetak hasil
+        # print("\n===== DATA POINT =====")
+        # for key, value in data_save.items():
+        #     if value.strip():
+        #         print(f"{key}: {value}")
+        #     else:
+        #         print(f"{key}: Data tidak tersedia")
+        # print("=" * 40)
+
+        # save_station_data(data_save)
+        
+        # Simpan gambar-gambar
+        
 
 
 def main():
