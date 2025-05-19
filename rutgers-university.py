@@ -359,36 +359,36 @@ def extract_station_name(soup):
         )
     return "Unknown_Station"
 
-# def download_images(soup, station_name):
-#     """Unduh semua gambar dari slider dengan nama berdasarkan title"""
-#     slider = soup.find("div", id="slider")
-#     if not slider:
-#         print("⚠️ Tidak ada slider ditemukan.")
-#         return
+def download_images(soup, station_name):
+    """Unduh semua gambar dari slider dengan nama berdasarkan title"""
+    slider = soup.find("div", id="slider")
+    if not slider:
+        print("⚠️ Tidak ada slider ditemukan.")
+        return
 
-#     img_tags = slider.find_all("img")
-#     os.makedirs("Rutgers University Image", exist_ok=True)
+    img_tags = slider.find_all("img")
+    os.makedirs("Rutgers University Image", exist_ok=True)
 
-#     for img in img_tags:
-#         src = img.get("src")
-#         title = img.get("title")
+    for img in img_tags:
+        src = img.get("src")
+        title = img.get("title")
 
-#         if not src or not title:
-#             continue  # Skip gambar tanpa judul
+        if not src or not title:
+            continue  # Skip gambar tanpa judul
 
-#         ext = os.path.splitext(src)[1]
-#         safe_title = sanitize_filename(title)
-#         filename = f"{station_name} - {safe_title}{ext}"
-#         filepath = os.path.join("Rutgers University Image", filename)
+        ext = os.path.splitext(src)[1]
+        safe_title = sanitize_filename(title)
+        filename = f"{station_name} - {safe_title}{ext}"
+        filepath = os.path.join("Rutgers University Image", filename)
 
-#         try:
-#             response = requests.get(src)
-#             response.raise_for_status()
-#             with open(filepath, "wb") as f:
-#                 f.write(response.content)
-#             print(f"✅ Disimpan: {filename}")
-#         except Exception as e:
-#             print(f"❌ Gagal mengunduh {src}: {e}")
+        try:
+            response = requests.get(src)
+            response.raise_for_status()
+            with open(filepath, "wb") as f:
+                f.write(response.content)
+            print(f"✅ Disimpan: {filename}")
+        except Exception as e:
+            print(f"❌ Gagal mengunduh {src}: {e}")
 
 
 def parse_station_info_table(html):
