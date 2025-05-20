@@ -8,8 +8,8 @@ HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36"
 }
 
-CSV_FILENAME = "Texas Tech University.csv"
-FIELDNAMES = [ "Station Name", "Mesonet ID", "Station ID", "NWS ID", "SHEF ID", "Station address", "County", "State", "Latitude", "Longitude", "Elevation", "Commissioned" ]
+CSV_FILENAME = "Texas Tech University----.csv"
+FIELDNAMES = [ "Station Name", "Mesonet ID / NWSLI ID", "Station ID", "NWS ID", "SHEF ID", "Station address", "County", "State", "Latitude", "Longitude", "Elevation", "Commissioned" ]
 
 
 
@@ -51,22 +51,60 @@ def get_json(url):
 def display_json(data_meta):
     results = data_meta.get("results", [])
     
+    
     for meta_data in results:
         station_name  = meta_data['name']
+        # mesonet_id  = meta_data['nws_li_id']
         mesonet_id  = meta_data['mesonet_id']
-        station_id  = meta_data['station_id']
-        nws_id_1 = meta_data['nws_kid'] 
-        nws_id_2 = meta_data['nws_xid']
-        nws_id = nws_id_1 +" / "+ nws_id_2 
-        shef_id	= meta_data['shef_id']
-        location_desc = meta_data['location_desc']
-        county = meta_data['county']
-        state = meta_data['state']
-        latitude = meta_data['latitude']
-        longitude = meta_data['longitude']
-        elevation = meta_data['elevation']
-        installed = meta_data['installed']
-
+        try:
+            station_id  = meta_data['station_id']
+        except:
+            station_id = ''
+        try:
+            nws_id_1 = meta_data['nws_kid'] 
+        except:
+            nws_id_1 = ''
+        try:
+            nws_id_2 = meta_data['nws_xid']
+        except:
+            nws_id_2 =''
+        try:
+            nws_id = nws_id_1 +" / "+ nws_id_2 
+        except:
+            nws_id =''
+        try:
+            shef_id	= meta_data['shef_id']
+        except:
+            shef_id =''
+        try:    
+            location_desc = meta_data['location_desc']
+        except:
+            location_desc = ''
+        try:
+            county = meta_data['county']
+        except:
+            county= ''
+        try:
+            state = meta_data['state']
+        except:
+            state =''
+        try:
+            latitude = meta_data['latitude']
+        except:
+            latitude = ''
+        try:
+            longitude = meta_data['longitude']
+        except:
+            longitude = ''
+        try:
+            elevation = meta_data['elevation']
+        except:
+            elevation =''
+        try:
+            installed = meta_data['installed']
+        except:
+            installed =''
+        # url_image = f"https://api.mesonet.ttu.edu/media/sodar_photo/{mesonet_id}.jpg"
         url_image = f"https://api.mesonet.ttu.edu/media/mesonet_photo/{mesonet_id}.jpg"
         print(url_image)
 
@@ -78,16 +116,16 @@ def display_json(data_meta):
         
         data_save = {
             "Station Name": station_name,
-            "Mesonet ID" : mesonet_id,        
+            "Mesonet ID / NWSLI ID" : mesonet_id,        
             "Station ID" : station_id,
             "NWS ID" : nws_id,
             "SHEF ID" : shef_id,
             "Station address" : location_desc,
             "County" : county,
             "State" : state,
-            "Latitude" : f"'{latitude}",
-            "Longitude" : f"'{longitude}",
-            "Elevation" : f"'{elevation}",
+            "Latitude" : f"'{latitude}{'°'}",
+            "Longitude" : f"'{longitude}{'°'}",
+            "Elevation" : f"'{elevation}{' feet'}",
             "Commissioned" : f"'{installed}"
         }
         # Cetak hasil
