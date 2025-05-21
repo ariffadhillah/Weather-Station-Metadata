@@ -544,6 +544,55 @@ def sensor(driver):
 
 
 
+def media(driver, station_name):
+    """Klik tab 'Media' dan simpan semua gambar dari tab tersebut."""
+    try:
+        time.sleep(1)  # Beri waktu DOM stabil
+
+        sensor_tab = WebDriverWait(driver, 10).until(
+            EC.element_to_be_clickable((By.ID, "tab_media"))
+        )
+        sensor_tab.click()
+        print("✅ Tab 'Media' berhasil diklik.")
+
+        # Tunggu hingga media header muncul
+        WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((
+                By.XPATH, "//h1[@id='media_header' and text()='Station Photos & Videos']"
+            ))
+        )
+        print("✅ Elemen 'Station Photos & Videos' berhasil dimuat.")
+
+        # Parse HTML dan cari semua gambar
+        sensor_html = driver.page_source
+        soup = BeautifulSoup(sensor_html, 'html.parser')
+
+        figures = soup.find_all('figure')
+        print(f"📸 Menemukan {len(figures)} gambar.")
+
+        # Folder untuk menyimpan gambar
+        os.makedirs("North Carolina State University - Image", exist_ok=True)
+
+        for fig in figures:
+            img_tag = fig.find('img')
+            figcaption = fig.find('figcaption')
+
+            if img_tag and figcaption:
+                img_url = img_tag['src']
+                direction = figcaption.get_text(strip=True).replace(" ", "_")  # e.g., Northwest
+                extension = os.path.splitext(img_url)[1].split('?')[0]  # e.g., .jpg
+
+                filename = f"{station_name}-{direction}{extension}"
+                filepath = os.path.join("North Carolina State University - Image", filename)
+
+                # Download image
+                response = requests.get(img_url)
+                with open(filepath, 'wb') as f:
+                    f.write(response.content)
+                print(f"✅ Gambar disimpan: {filename}")
+
+    except Exception as e:
+        print(f"❌ Gagal menyimpan gambar media: {e}")
 
 
 def open_urls_with_selenium(data):
