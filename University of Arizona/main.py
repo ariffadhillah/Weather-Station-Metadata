@@ -48,7 +48,7 @@ HEADERS = {
 #     return data
 
 
-def save_to_csv(data, filename="University of Arizona.csv"):
+def save_to_csv(data, filename="terbaru-University of Arizona.csv"):
     file_exists = os.path.isfile(filename)
 
     # Urutan kolom yang diinginkan
@@ -83,7 +83,6 @@ def save_to_csv(data, filename="University of Arizona.csv"):
         writer.writerow(data)
 
     print(f"💾 Data disimpan: {data.get('Station Name')}")
-
 
 
 
@@ -134,10 +133,10 @@ def extract_table_data(soup):
             "Symbol": cols[1].get_text(strip=True),
             "Station ID": cols[2].get_text(strip=True),
             "County": cols[3].get_text(strip=True),
-            "Latitude": cols[4].get_text(strip=True),
-            "Longitude": cols[5].get_text(strip=True),
-            "Elevation (ft)": cols[6].get_text(strip=True),
-            "Elevation (m)": cols[7].get_text(strip=True),
+            "Latitude": f"'{cols[4].get_text(strip=True)}",
+            "Longitude": f"'{cols[5].get_text(strip=True)}",
+            "Elevation (ft)": f"'{cols[6].get_text(strip=True)}",
+            "Elevation (m)": f"'{cols[7].get_text(strip=True)}",
             "Status": cols[8].get_text(strip=True),
             "Description": cols[9].get_text(strip=True),
         }
@@ -376,7 +375,7 @@ def main():
         print(f"\n📍 [{i}/{len(stations)}] Memproses station: {station.get('Station Name')} - ID: {station_id}")
         if station_id:
             combined_data = combine_station_data(station)
-            save_to_csv(combined_data, filename="stations_data.csv")  # Simpan langsung
+            save_to_csv(combined_data, filename="terbaru-University of Arizona.csv")  # Simpan langsung
             time.sleep(2)  # Hindari hit server terlalu cepat
 
 
