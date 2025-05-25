@@ -220,7 +220,7 @@ def extract_data_from_url(html, url=None):
         image_urls_list = image_urls.splitlines()
 
         # Gunakan folder tetap
-        folder_name = "University of Nebraska"
+        folder_name = "-------------------University of Nebraska"
         if not os.path.exists(folder_name):
             os.makedirs(folder_name)
 

@@ -5,7 +5,7 @@ import csv
 import os
 import json
 import re
-
+from urllib.parse import urlparse
 
 BASE_URL = "https://www.njweather.org/data/"
 HEADERS = {
@@ -19,6 +19,7 @@ CSV_FILENAME = "Rutgers University.csv"
 
 FIELDNAMES = [
         "Station Name",
+        "Station ID",
         "Alt. name",
         "Station Type",
         "Network",
@@ -359,36 +360,75 @@ def extract_station_name(soup):
         )
     return "Unknown_Station"
 
-def download_images(soup, station_name):
-    """Unduh semua gambar dari slider dengan nama berdasarkan title"""
-    slider = soup.find("div", id="slider")
-    if not slider:
-        print("⚠️ Tidak ada slider ditemukan.")
-        return
+# def download_images(soup, station_name):
+#     """Unduh semua gambar dari slider dengan nama berdasarkan title"""
+#     slider = soup.find("div", id="slider")
+#     if not slider:
+#         print("⚠️ Tidak ada slider ditemukan.")
+#         return
 
-    img_tags = slider.find_all("img")
-    os.makedirs("Rutgers University Image", exist_ok=True)
+#     img_tags = slider.find_all("img")
+#     os.makedirs("Rutgers University Image-ID", exist_ok=True)
 
-    for img in img_tags:
-        src = img.get("src")
-        title = img.get("title")
+#     for img in img_tags:
+#         src = img.get("src")
+#         title = img.get("title")
 
-        if not src or not title:
-            continue  # Skip gambar tanpa judul
+#         if not src or not title:
+#             continue  # Skip gambar tanpa judul
 
-        ext = os.path.splitext(src)[1]
-        safe_title = sanitize_filename(title)
-        filename = f"{station_name} - {safe_title}{ext}"
-        filepath = os.path.join("Rutgers University Image", filename)
+#         ext = os.path.splitext(src)[1]
+#         safe_title = sanitize_filename(title)
+#         filename = f"{station_name} - {safe_title}{ext}"
+#         filepath = os.path.join("Rutgers University Image-ID", filename)
 
-        try:
-            response = requests.get(src)
-            response.raise_for_status()
-            with open(filepath, "wb") as f:
-                f.write(response.content)
-            print(f"✅ Disimpan: {filename}")
-        except Exception as e:
-            print(f"❌ Gagal mengunduh {src}: {e}")
+#         try:
+#             response = requests.get(src)
+#             response.raise_for_status()
+#             with open(filepath, "wb") as f:
+#                 f.write(response.content)
+#             print(f"✅ Disimpan: {filename}")
+#         except Exception as e:
+#             print(f"❌ Gagal mengunduh {src}: {e}")
+
+
+# import os
+# import requests
+# from urllib.parse import urlparse
+
+# def download_images(soup, station_name):
+#     """Unduh gambar pertama dari slider dan simpan dengan nama berdasarkan station_name (misal: 272.jpg)"""
+#     slider = soup.find("div", id="slider")
+#     if not slider:
+#         print("⚠️ Tidak ada slider ditemukan.")
+#         return
+
+#     img = slider.find("img")
+#     if not img:
+#         print("⚠️ Tidak ada gambar ditemukan dalam slider.")
+#         return
+
+#     src = img.get("src")
+#     if not src:
+#         print("⚠️ Gambar tidak memiliki src.")
+#         return
+
+#     # Ekstensi dari URL
+#     ext = os.path.splitext(urlparse(src).path)[1] or ".jpg"  # fallback ke .jpg jika kosong
+#     filename = f"{station_name}{ext}"
+#     folder = "Image Station Rutgers University"
+#     filepath = os.path.join(folder, filename)
+#     os.makedirs(folder, exist_ok=True)
+
+#     # Unduh gambar
+#     try:
+#         response = requests.get(src)
+#         response.raise_for_status()
+#         with open(filepath, "wb") as f:
+#             f.write(response.content)
+#         print(f"✅ Gambar pertama berhasil disimpan sebagai: {filename}")
+#     except Exception as e:
+#         print(f"❌ Gagal mengunduh gambar: {e}")
 
 
 def parse_station_info_table(html):
@@ -530,9 +570,9 @@ def extract_sensor_detail_by_anchor(html, anchor_id):
                     if len(cols) == 2:
                         key = cols[0].text.strip()
                         value = cols[1].decode_contents().strip()
-                        value = re.sub(r'<br\s*/?>', '\n', value)
-                        value = BeautifulSoup(value, 'html.parser').text
-                        value = value.replace('\r', '').replace('\xa0', ' ')
+                        # value = re.sub(r'<br\s*/?>', '\n', value)
+                        # value = BeautifulSoup(value, 'html.parser').text
+                        # value = value.replace('\r', '').replace('\xa0', ' ')
                         sensor_data[key] = value
                     elif len(cols) == 1:
                         sensor_data["extra"] = cols[0].text.strip()
@@ -630,10 +670,55 @@ def extract_data_from_url(html, url=None):
     station_name = extract_station_name(soup)
 
     print(f"✅ Memproses: {station_name}")
+    # if url:
+    #     print(f"🌐 URL: {url}")
+
+    station_id = None
     if url:
         print(f"🌐 URL: {url}")
+        # Ekstrak ID dari URL
+        path_parts = urlparse(url).path.strip('/').split('/')
+        if len(path_parts) >= 2 and path_parts[-2] == 'station':
+            station_id = path_parts[-1]
     
     # download_images(soup, station_name)
+
+
+    
+# def download_images(soup, station_name):
+    """Unduh gambar pertama dari slider dan simpan dengan nama berdasarkan station_name (misal: 272.jpg)"""
+    slider = soup.find("div", id="slider")
+    if not slider:
+        print("⚠️ Tidak ada slider ditemukan.")
+        return
+
+    img = slider.find("img")
+    if not img:
+        print("⚠️ Tidak ada gambar ditemukan dalam slider.")
+        return
+
+    src = img.get("src")
+    if not src:
+        print("⚠️ Gambar tidak memiliki src.")
+        return
+
+    # Ekstensi dari URL
+    ext = os.path.splitext(urlparse(src).path)[1] or ".jpg"  # fallback ke .jpg jika kosong
+    filename = f"{station_id}{ext}"
+    folder = "Image Station Rutgers University"
+    filepath = os.path.join(folder, filename)
+    os.makedirs(folder, exist_ok=True)
+
+    # Unduh gambar
+    try:
+        response = requests.get(src)
+        response.raise_for_status()
+        with open(filepath, "wb") as f:
+            f.write(response.content)
+        print(f"✅ Gambar pertama berhasil disimpan sebagai: {filename}")
+    except Exception as e:
+        print(f"❌ Gagal mengunduh gambar: {e}")
+
 
     meta_data = parse_station_info_table(html)
     
@@ -690,6 +775,7 @@ def extract_data_from_url(html, url=None):
 
     data_save = {
         "Station Name" : station_name,
+        "Station ID": station_id,
         "Alt. name" : meta_data.get("Alt. name") if meta_data else " ",
         "Station Type" : meta_data.get("Type") if meta_data else " ",
         "Network": meta_data.get("Network") if meta_data else " ",
